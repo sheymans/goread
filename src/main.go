@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"flag"
+	"fmt"
+)
 
 func main() {
-	fmt.Println("Hello World!")
+	var goodReadsCSV string
+	flag.StringVar(&goodReadsCSV, "g", "", "The path to your Goodreads CSV")
+
+	flag.Parse()
+
+	fmt.Println(goodReadsCSV)
+
 }
