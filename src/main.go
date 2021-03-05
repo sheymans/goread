@@ -15,27 +15,50 @@ type Book struct {
 }
 
 func main() {
-
-	// TODO error handling for CLI parameters
 	var goodReadsCSV string
+	var library string
 	flag.StringVar(&goodReadsCSV, "g", "", "The path to your Goodreads CSV")
+	flag.StringVar(&library, "l", "smpl", "Your library")
 	flag.Parse()
 
-	// Open the CSV
-	f, err := os.Open(goodReadsCSV)
+	books, err := getBooks(goodReadsCSV)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("something went wrong: ", err)
 		return
 	}
 
-	r := csv.NewReader(f)
-	// skip column headers
-	_, err = r.Read()
-	if err != nil {
-		fmt.Println("could not read headers", err)
-		return
+	for _, book := range books {
+		fmt.Println(librarySearchUrl(library, book))
 	}
 
+}
+
+func getBooks(csvFile string) ([]Book, error) {
+	r, err := createCsvReader(csvFile)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = readHeaders(r)
+	if err != nil {
+		return nil, err
+	}
+
+	books := readBooks(r)
+	return books, nil
+}
+
+func createCsvReader(csvFile string) (*csv.Reader, error) {
+	f, err := os.Open(csvFile)
+	return csv.NewReader(f), err
+}
+
+func readHeaders(r *csv.Reader) ([]string, error){
+	headers, err := r.Read()
+	return headers, err
+}
+
+func readBooks(r *csv.Reader) []Book {
 	books := make([]Book, 0)
 	for {
 		record, err := r.Read()
@@ -50,8 +73,19 @@ func main() {
 				author: record[2],
 				isbn:   record[5],
 			}
+
 			books = append(books, book)
 		}
 	}
-	fmt.Println(books)
+
+	return books
+}
+
+func librarySearchUrl(library string, b Book) string {
+	base := library + ".bibliocommons.com/v2/search?query"
+	if b.isbn != "=\"\"" {
+		return base + b.isbn
+	}
+	fmt.Println(b)
+	return base + "=\"" + b.title + "\""
 }
