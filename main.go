@@ -13,7 +13,6 @@ import (
 // 2. do not do Println but properly log and exit
 // 3. re-organize data structs (library vs books)
 // 4. pretty print output
-// 5. error checking parse arguments.
 
 func main() {
 	var goodReadsCSV string
@@ -21,6 +20,11 @@ func main() {
 	flag.StringVar(&goodReadsCSV, "g", "", "The path to your Goodreads CSV")
 	flag.StringVar(&library, "l", "smpl", "Your library")
 	flag.Parse()
+
+	if goodReadsCSV == "" {
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
 
 	err := app.Run(goodReadsCSV, library)
 
