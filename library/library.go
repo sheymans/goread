@@ -22,11 +22,11 @@ func (l Library) SearchUrl(b book.Book) string {
 }
 
 func (l Library) IsAvailable(b book.Book) (bool, error) {
-	url := l.SearchUrl(b)
-	response, err := http.Get(url)
+	searchUrl := l.SearchUrl(b)
+	response, err := http.Get(searchUrl)
 
 	if err != nil {
-		return false, fmt.Errorf("could not get URL %s with error %s", url, err)
+		return false, fmt.Errorf("could not get URL %s with error %s", searchUrl, err)
 	}
 	defer response.Body.Close()
 

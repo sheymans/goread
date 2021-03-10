@@ -11,7 +11,6 @@ import (
 func Run(goodReadsCSV string, libraryCode string) error {
 	books, err := parser.ParseBooks(goodReadsCSV)
 	if err != nil {
-		// essentially rethrowing this
 		return err
 	}
 
@@ -20,7 +19,6 @@ func Run(goodReadsCSV string, libraryCode string) error {
 	}
 
 	availableBooks := make([]book.Book, 0)
-
 
 	for i, book := range books {
 		fmt.Printf("Checking (%d/%d) %s...", i + 1, len(books), book.Title)
@@ -40,11 +38,10 @@ func Run(goodReadsCSV string, libraryCode string) error {
 	} else {
 		fmt.Println("\nThe following books are available:")
 		for _, availableBook := range availableBooks {
-			fmt.Printf("%s at %s\n", availableBook.Title, l.SearchUrl(availableBook))
+			fmt.Printf("%s at \"%s\"\n", availableBook.Title, l.SearchUrl(availableBook))
 		}
 	}
 
-	// no errors
 	return nil
 }
 

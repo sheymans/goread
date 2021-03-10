@@ -9,10 +9,7 @@ import (
 
 // TODos
 
-// 1. add tests
-// 2. do not do Println but properly log and exit
-// 3. re-organize data structs (library vs books)
-// 4. pretty print output
+// 5. update README
 
 func main() {
 	var goodReadsCSV string
