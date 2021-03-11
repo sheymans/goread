@@ -38,7 +38,7 @@ func Run(goodReadsCSV string, libraryCode string) error {
 	} else {
 		fmt.Println("\nThe following books are available:")
 		for _, availableBook := range availableBooks {
-			fmt.Printf("%s at \"%s\"\n", availableBook.Title, l.SearchUrl(availableBook))
+			fmt.Printf("%s at %s\n", availableBook.Title, l.SearchUrl(availableBook))
 		}
 	}
 
