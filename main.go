@@ -7,10 +7,6 @@ import (
 	"os"
 )
 
-// TODos
-
-// 5. update README
-
 func main() {
 	var goodReadsCSV string
 	var library string
