@@ -2,11 +2,12 @@ package library
 
 import (
 	"fmt"
-	"github.com/sheymans/goread/book"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/sheymans/goread/book"
 )
 
 type Library struct {
@@ -15,14 +16,11 @@ type Library struct {
 
 type Availability struct {
 	Available bool
-	Type string
+	Type      string
 }
 
 func (l Library) SearchUrl(b book.Book) string {
 	base := "http://" + l.LibraryCode + ".bibliocommons.com/v2/search?query"
-	if b.Isbn != "=\"\"" {
-		return base + b.Isbn
-	}
 	return base + "=\"" + url.QueryEscape(b.Title) + "\""
 }
 
