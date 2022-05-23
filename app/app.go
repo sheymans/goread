@@ -25,7 +25,7 @@ func Run(goodReadsCSV string, libraryCode string) error {
 		pause(5)
 
 		available, err := l.IsAvailable(book)
-		if err != nil || !available {
+		if err != nil || !available.Available {
 			fmt.Println("\u2718")
 		} else {
 			availableBooks = append(availableBooks, book)

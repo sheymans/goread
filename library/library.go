@@ -13,6 +13,11 @@ type Library struct {
 	LibraryCode string
 }
 
+type Availability struct {
+	Available bool
+	Type string
+}
+
 func (l Library) SearchUrl(b book.Book) string {
 	base := "http://" + l.LibraryCode + ".bibliocommons.com/v2/search?query"
 	if b.Isbn != "=\"\"" {
@@ -21,19 +26,20 @@ func (l Library) SearchUrl(b book.Book) string {
 	return base + "=\"" + url.QueryEscape(b.Title) + "\""
 }
 
-func (l Library) IsAvailable(b book.Book) (bool, error) {
+func (l Library) IsAvailable(b book.Book) (Availability, error) {
 	searchUrl := l.SearchUrl(b)
 	response, err := http.Get(searchUrl)
 
 	if err != nil {
-		return false, fmt.Errorf("could not get URL %s with error %s", searchUrl, err)
+		return Availability{}, fmt.Errorf("could not get URL %s with error %s", searchUrl, err)
 	}
 	defer response.Body.Close()
 
 	html, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		return false, fmt.Errorf("could not read HTML: %s", err)
+		return Availability{false, ""}, fmt.Errorf("could not read HTML: %s", err)
 	}
 
-	return strings.Contains(string(html), "availability-status-available"), nil
+	available := strings.Contains(string(html), "availability-status-available")
+	return Availability{available, "physical"}, nil
 }
